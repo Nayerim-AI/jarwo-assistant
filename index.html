@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JARWO - AI Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Particle overlay -->
+  <canvas id="particles"></canvas>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <h1>JARWO <span class="subtitle">AI ASSISTANT</span></h1>
+    </header>
+
+    <!-- Visualizer (Radar + Waves) -->
+    <div class="visualizer-container">
+      <div class="radar" id="radar">
+        <div class="radar-ring ring-1"></div>
+        <div class="radar-ring ring-2"></div>
+        <div class="radar-ring ring-3"></div>
+        <div class="radar-dot" id="radarDot"></div>
+      </div>
+      <div class="wave-bars" id="waveBars">
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+        <div class="wave-bar"></div>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="status-container">
+      <span class="status-indicator" id="statusDot"></span>
+      <span class="status-text" id="statusText">STANDBY</span>
+    </div>
+
+    <!-- Transcript -->
+    <div class="transcript-container">
+      <div class="panel-label">ANDA MENGATAKAN</div>
+      <div class="transcript-text" id="transcriptText">—</div>
+    </div>
+
+    <!-- Response -->
+    <div class="response-container">
+      <div class="panel-label">JARWO MENJAWAB</div>
+      <div class="response-text" id="responseText">—</div>
+    </div>
+
+    <!-- Recording Info -->
+    <div class="recording-info" id="recordingInfo" style="display:none">
+      <div class="recording-timer" id="recordingTimer">00:00</div>
+      <div class="recording-label">MEREKAM</div>
+    </div>
+
+    <!-- Audio Player -->
+    <div class="audio-player-container" id="audioPlayerContainer" style="display:none">
+      <audio controls id="audioPlayer"></audio>
+      <div class="recording-meta" id="recordingMeta"></div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="button-container">
+      <button id="btnActivate" class="btn btn-primary">Aktifkan Jarwo</button>
+      <button id="btnDeactivate" class="btn btn-secondary" disabled>Nonaktifkan</button>
+      <button id="btnStartRecording" class="btn btn-record" disabled>Mulai Rekam</button>
+      <button id="btnStopRecording" class="btn btn-danger" disabled>Berhenti Rekam</button>
+      <button id="btnDownload" class="btn btn-accent" disabled>Download</button>
+      <button id="btnClear" class="btn btn-ghost" disabled>Hapus Rekaman</button>
+    </div>
+
+    <!-- Support notice -->
+    <div class="support-notice" id="supportNotice">
+      Peramban Anda tidak mendukung Web Speech API atau MediaRecorder. Gunakan Chrome/Edge versi terbaru.
+    </div>
+
+    <!-- History -->
+    <div class="history-container">
+      <div class="panel-label">RIWAYAT PERINTAH</div>
+      <div class="history-list" id="historyList">
+        <div class="history-empty">Belum ada perintah</div>
+      </div>
+    </div>
+
+    <!-- Privacy Footer -->
+    <div class="privacy-footer">
+      <span>🔒 Semua pemrosesan di browser. Rekaman tidak dikirim ke server.</span>
+    </div>
+  </div>
+
+  <script src="js/speech-recognition.js"></script>
+  <script src="js/text-to-speech.js"></script>
+  <script src="js/audio-recorder.js"></script>
+  <script src="js/command-processor.js"></script>
+  <script src="js/ui-manager.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
