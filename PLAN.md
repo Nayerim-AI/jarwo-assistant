@@ -77,18 +77,19 @@ Orange Pi 5 (lokal)  →  server.py  :8095  (Flask, "local-cpu" gateway)
 
 ## 4. Rencana Perbaikan (bertahap)
 
-### Fase 0 — Recovery cepat (bikin jalan lagi) — ~30 mnt
-- [ ] Nyalakan TTS VoxCPM2 di ECS (`serve_local.py`, port 8000) — **jangan ubah port**.
-- [ ] Nyalakan gateway lokal `server.py` (8095).
-- [ ] Smoke test end-to-end: `/api/capabilities`, `/api/text-command`, `/api/tts`.
-- [ ] Verifikasi ASR (8096) masih sehat.
+### Fase 0 — Recovery cepat (bikin jalan lagi) — ✅ SELESAI 2026-07-06
+- [x] Nyalakan TTS VoxCPM2 di ECS (8000, bind 127.0.0.1).
+- [x] Pindahkan gateway ke ECS (`:8098`), delegasi ASR/TTS via loopback.
+- [x] Smoke test end-to-end: capabilities, text-command, TTS (200, WAV valid) — hijau.
+- [x] Verifikasi ASR (8096) sehat.
+- [x] Fix G4 (dead-code fallback) + G8 (gitignore, git bersih, remote SSH).
 
-### Fase 1 — Persistensi (production baseline) — ~2 jam
-- [ ] Buat **systemd unit** di ECS: `jarwo-asr.service` (8096) + `jarwo-tts.service` (8000), `Restart=always`.
-- [ ] Buat unit/service persisten untuk gateway lokal (systemd user / supervisor) — pakai port eksisting 8095.
-- [ ] Guard VRAM: pastikan koeksistensi dengan RAMOS (T4 dibagi). Dokumentasikan urutan start.
+### Fase 1 — Persistensi — ✅ SELESAI 2026-07-06
+- [x] systemd unit ECS: jarwo-asr (8096), jarwo-tts (8000), jarwo-gateway (8098), semua `Restart=always` + `enabled` (auto-start on boot). Tersimpan di `deploy/systemd/`.
+- [x] Handover dari nohup → systemd. Ketiga service active+enabled, smoke test hijau.
+- [ ] Guard VRAM koeksistensi dgn RAMOS — terdokumentasi di deploy/README (T4 dibagi; VoxCPM2 ~5.3GB).
 
-### Fase 2 — Robustness — ~2 jam
+### Fase 2 — Robustness (belum) — ~2 jam
 - [ ] Fix G4: pindahkan fallback ASR lokal ke posisi reachable (try remote → except → CPU whisper). Atau hapus dead code bila fallback tak diinginkan.
 - [ ] Health aggregator: endpoint `/api/health-full` cek ASR+TTS+ffmpeg.
 - [ ] Voice profile mgmt: reference audio dari config, bukan hardcode.
