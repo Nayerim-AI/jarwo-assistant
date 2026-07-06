@@ -278,9 +278,13 @@ def healthz():
 
 @app.get("/api/capabilities")
 def capabilities():
-    import faster_whisper
+    try:
+        import faster_whisper
 
-    v = getattr(faster_whisper, "__version__", "?")
+        v = getattr(faster_whisper, "__version__", "?")
+        fallback = f"local-faster-whisper-{MODEL_SIZE} (v{v})"
+    except Exception:
+        fallback = "disabled (faster-whisper not installed)"
     return jsonify(
         {
             "mode": "local-cpu",
@@ -288,7 +292,7 @@ def capabilities():
             "wake_word": "local-command-gate",
             "asr": "remote-gpu-faster-whisper-medium",
             "asr_remote_url": REMOTE_ASR_URL,
-            "asr_fallback": f"local-faster-whisper-{MODEL_SIZE} (v{v})",
+            "asr_fallback": fallback,
             "tts": "remote-tts-indonesia",
             "tts_remote_url": REMOTE_TTS_URL,
             "tts_reference_audio": REMOTE_TTS_REFERENCE_AUDIO,
