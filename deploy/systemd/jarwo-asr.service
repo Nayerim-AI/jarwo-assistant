@@ -1,0 +1,18 @@
+[Unit]
+Description=JARWO ASR (faster-whisper large-v3, GPU) :8096
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/ASR
+ExecStart=/root/ASR/venv/bin/python jarwo_asr_server.py
+Restart=always
+RestartSec=5
+Environment=JARWO_ASR_PORT=8096
+StandardOutput=append:/root/ASR/asr.log
+StandardError=append:/root/ASR/asr.log
+
+[Install]
+WantedBy=multi-user.target

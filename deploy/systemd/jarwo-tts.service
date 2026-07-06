@@ -1,0 +1,19 @@
+[Unit]
+Description=JARWO TTS (VoxCPM2 Bahasa Indonesia, GPU) :8000
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/tts-indonesia
+ExecStart=/root/tts-indonesia/venv/bin/python scripts/serve_local.py
+Restart=always
+RestartSec=5
+# Colocated with gateway -> bind loopback only.
+Environment=TTS_HOST=127.0.0.1
+StandardOutput=append:/root/tts-indonesia/logs/serve_local.log
+StandardError=append:/root/tts-indonesia/logs/serve_local.log
+
+[Install]
+WantedBy=multi-user.target
