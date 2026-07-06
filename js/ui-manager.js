@@ -10,6 +10,8 @@ class UIManager {
     this.statusText     = document.getElementById('statusText');
     this.transcriptText = document.getElementById('transcriptText');
     this.responseText   = document.getElementById('responseText');
+    this.listeningInfo  = document.getElementById('listeningInfo');
+    this.listeningTimer = document.getElementById('listeningTimer');
     this.recordingInfo  = document.getElementById('recordingInfo');
     this.recordingTimer = document.getElementById('recordingTimer');
     this.waveBars       = document.getElementById('waveBars');
@@ -80,13 +82,27 @@ class UIManager {
   }
 
   /** Tampilkan panel rekaman */
+  showListeningUI() {
+    if (!this.listeningInfo) return;
+    this.listeningInfo.style.display = 'block';
+    this.waveBars.classList.add('active');
+    if (this.listeningTimer) this.listeningTimer.textContent = '00:00';
+  }
+
+  hideListeningUI() {
+    if (!this.listeningInfo) return;
+    this.listeningInfo.style.display = 'none';
+    this.waveBars.classList.remove('active');
+  }
+
+  /** Tampilkan panel recording manual */
   showRecordingUI() {
     this.recordingInfo.style.display = 'block';
     this.waveBars.classList.add('active');
     this.recordingTimer.textContent = '00:00';
   }
 
-  /** Sembunyikan panel rekaman */
+  /** Sembunyikan panel recording manual */
   hideRecordingUI() {
     this.recordingInfo.style.display = 'none';
     this.waveBars.classList.remove('active');
@@ -138,9 +154,9 @@ class UIManager {
 
   /** Perbarui status enabled/disabled tombol berdasarkan state */
   updateButtons(state) {
-    this.btnActivate.disabled   = state.isAssistantActive;
+    this.btnActivate.disabled   = state.isAssistantActive || state.isRecording;
     this.btnDeactivate.disabled = !state.isAssistantActive;
-    this.btnStartRec.disabled   = !state.isAssistantActive || state.isRecording;
+    this.btnStartRec.disabled   = state.isAssistantActive || state.isRecording;
     this.btnStopRec.disabled    = !state.isRecording;
     this.btnDownload.disabled   = !state.hasRecording;
     this.btnClear.disabled      = !state.hasRecording;

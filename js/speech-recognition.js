@@ -74,8 +74,11 @@ class SpeechRecognitionManager {
 
     // --- Event: error ---
     this.recognition.onerror = (event) => {
-      // 'no-speech' dan 'aborted' adalah normal, jangan propagate sebagai error
+      // 'no-speech' dan 'aborted' adalah normal, jangan propagate sebagai error.
+      // Tetap panggil onEnd agar app bisa restart wake-word listener.
       if (event.error === 'no-speech' || event.error === 'aborted') {
+        this.isListening = false;
+        if (this.onEnd) this.onEnd();
         return;
       }
       this.consecutiveErrors++;

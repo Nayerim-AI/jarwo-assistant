@@ -1,6 +1,6 @@
 # JARWO AI Assistant
 
-Asisten suara pribadi berbasis web dengan teknologi **Web Speech API**, **SpeechSynthesis API**, dan **MediaRecorder API**.
+Asisten suara pribadi berbasis web dengan mode **lokal CPU**. Browser hanya merekam audio dengan **MediaRecorder API**, lalu backend lokal melakukan ASR/command/TTS tanpa Web Speech API/cloud ASR.
 
 ## Cara Menjalankan
 
@@ -13,30 +13,47 @@ cd jarwo-assistant
 2. Jalankan server HTTP lokal:
 
 ```bash
-python3 -m http.server 8000
+python3 -m venv .venv
+. .venv/bin/activate
+pip install flask vosk
+python server.py
 ```
+
+Untuk ASR lokal, taruh model Vosk Bahasa Indonesia di:
+
+```text
+models/vosk-id/
+```
+
+Atau set env:
+
+```bash
+JARWO_VOSK_MODEL=/path/to/vosk-model-small-id python server.py
+```
+
+Untuk TTS lokal, install salah satu engine: `espeak-ng`, `espeak`, atau lanjutkan nanti dengan Piper.
 
 3. Buka browser dan akses:
 
 ```
-http://localhost:8000
+http://localhost:8095
 ```
 
-> **Catatan:** Web Speech API pada beberapa browser (Chrome) membutuhkan koneksi internet. Untuk hasil terbaik, buka melalui `localhost` atau HTTPS.
+> **Catatan:** Mode ini tidak memakai Web Speech API. Akses mikrofon browser tetap membutuhkan `localhost` atau HTTPS.
 
 ## Browser yang Direkomendasikan
 
-- **Google Chrome** (v80+) — dukungan penuh untuk Web Speech API dan MediaRecorder
+- **Google Chrome** (v80+) — dukungan penuh untuk MediaRecorder/getUserMedia
 - **Microsoft Edge** (Chromium-based, v80+)
-- **Mozilla Firefox** — dukungan terbatas (SpeechRecognition tidak tersedia)
+- **Mozilla Firefox** — bisa digunakan selama MediaRecorder/getUserMedia tersedia
 
 ## Cara Menggunakan
 
-1. Buka halaman `http://localhost:8000`
+1. Buka halaman `http://localhost:8095`
 2. Klik tombol **Aktifkan Jarwo**
 3. Izinkan akses mikrofon saat diminta browser
 4. Asisten akan menyapa dan siap digunakan
-5. Ucapkan perintah dengan diawali kata **"Jarwo"**
+5. Ucapkan **"Jarwo"** sebagai wake word, atau langsung **"Jarwo <perintah>"**. Listener otomatis mencoba aktif saat halaman dibuka.
 
 ## Daftar Perintah Suara
 
@@ -82,17 +99,17 @@ jarwo-assistant/
 
 ## Keterbatasan
 
-- **Web Speech API** (SpeechRecognition) membutuhkan koneksi internet di Chrome — pengenalan suara diproses oleh server Google
-- Akurasi pengenalan bahasa Indonesia mungkin bervariasi tergantung browser dan kualitas mikrofon
+- ASR lokal membutuhkan model Vosk Bahasa Indonesia di `models/vosk-id/`; tanpa model, backend akan melaporkan `missing_vosk_model`
+- TTS lokal membutuhkan `espeak-ng`, `espeak`, atau engine lokal lain; tanpa engine, endpoint TTS akan melaporkan `missing_tts_engine`
 - **Rekaman hanya tersimpan di memori browser (RAM)** — akan hilang jika halaman di-refresh atau ditutup
 - Pastikan mengunduh rekaman sebelum menutup halaman
-- SpeechSynthesis mungkin tidak memiliki suara bahasa Indonesia di semua OS
+- Kualitas ASR bergantung model lokal dan kualitas mikrofon
 
 ## Privasi
 
-- **Semua pemrosesan dilakukan di browser** — tidak ada data yang dikirim ke server eksternal (kecuali SpeechRecognition Chrome yang menggunakan server Google)
-- Rekaman audio tidak diunggah ke server mana pun
-- Rekaman hanya tersimpan sementara di memori browser
+- **Semua pemrosesan suara dilakukan lokal** di backend Jarwo pada mesin ini
+- Tidak memakai Web Speech API, SpeechSynthesis API, atau cloud ASR/TTS
+- Audio perintah dikirim dari browser ke backend lokal `/api/voice-command`
 - Tidak ada rekaman otomatis tanpa izin dan aktivasi pengguna
 - File rekaman harus diunduh secara manual agar tersimpan permanen
 
@@ -101,8 +118,9 @@ jarwo-assistant/
 - HTML5
 - CSS3 (animasi, glassmorphism, glow effects, responsive)
 - JavaScript (ES6+ classes, async/await)
-- Web Speech API (SpeechRecognition)
-- SpeechSynthesis API
+- Flask local backend
+- Vosk local ASR
+- Local TTS engine (`espeak-ng`/`espeak`; Piper planned)
 - MediaRecorder API
 - Canvas API (partikel background)
 

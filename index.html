@@ -58,10 +58,16 @@
       <div class="response-text" id="responseText">—</div>
     </div>
 
-    <!-- Recording Info -->
+    <!-- Listening Info: dipakai untuk command ASR, bukan fitur rekam manual -->
+    <div class="recording-info" id="listeningInfo" style="display:none">
+      <div class="recording-timer" id="listeningTimer">00:00</div>
+      <div class="recording-label">LISTENING</div>
+    </div>
+
+    <!-- Recording Info: fitur rekam audio manual -->
     <div class="recording-info" id="recordingInfo" style="display:none">
       <div class="recording-timer" id="recordingTimer">00:00</div>
-      <div class="recording-label">MEREKAM</div>
+      <div class="recording-label">RECORDING</div>
     </div>
 
     <!-- Audio Player -->
@@ -72,10 +78,10 @@
 
     <!-- Buttons -->
     <div class="button-container">
-      <button id="btnActivate" class="btn btn-primary">Aktifkan Jarwo</button>
+      <button id="btnActivate" class="btn btn-primary">Listening Jarwo</button>
       <button id="btnDeactivate" class="btn btn-secondary" disabled>Nonaktifkan</button>
-      <button id="btnStartRecording" class="btn btn-record" disabled>Mulai Rekam</button>
-      <button id="btnStopRecording" class="btn btn-danger" disabled>Berhenti Rekam</button>
+      <button id="btnStartRecording" class="btn btn-record">Mulai Recording</button>
+      <button id="btnStopRecording" class="btn btn-danger" disabled>Stop Recording</button>
       <button id="btnDownload" class="btn btn-accent" disabled>Download</button>
       <button id="btnClear" class="btn btn-ghost" disabled>Hapus Rekaman</button>
     </div>
@@ -95,12 +101,12 @@
 
     <!-- Privacy Footer -->
     <div class="privacy-footer">
-      <span>🔒 Semua pemrosesan di browser. Rekaman tidak dikirim ke server.</span>
+      <span>🔒 Mode lokal CPU. Audio dikirim hanya ke backend lokal Jarwo; tidak memakai Web Speech API/cloud ASR.</span>
     </div>
   </div>
 
-  <script src="js/speech-recognition.js"></script>
-  <script src="js/text-to-speech.js"></script>
+  <script src="js/local-voice-client.js"></script>
+  <script src="js/wake-word-client.js"></script>
   <script src="js/audio-recorder.js"></script>
   <script src="js/command-processor.js"></script>
   <script src="js/ui-manager.js"></script>
